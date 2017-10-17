@@ -1,0 +1,56 @@
+<md-sidenav-container class="example-container">
+  	<md-sidenav #sidenav class="example-sidenav" color="primary">
+        <md-toolbar color="primary">
+            <md-toolbar-row (click)="show_inbox()" mdTooltip="Inbox">
+                <span (click)="sidenav.toggle()">Inbox</span>
+                <span class="example-spacer"></span>
+                <md-icon class="example-icon" *ngIf="show_inbox_icon">verified_user</md-icon>
+            </md-toolbar-row>
+
+            <md-toolbar-row (click)="show_archived_inbox()" mdTooltip="Archived Inbox">
+                <span (click)="sidenav.toggle()">Archived Inbox</span>
+                <span class="example-spacer"></span>
+                <md-icon class="example-icon" *ngIf="show_archived_inbox_icon">verified_user</md-icon>
+            </md-toolbar-row>
+
+            <md-toolbar-row (click)="show_compose()" mdTooltip="Compose a Message">
+                <span (click)="sidenav.toggle()">Compose</span>
+                <span class="example-spacer"></span>
+                <md-icon class="example-icon" *ngIf="show_compose_icon">verified_user</md-icon>
+            </md-toolbar-row>
+
+            <md-toolbar-row mdTooltip="Logout">
+                <span (click)=logout()>Logout</span>
+                <span class="example-spacer"></span>
+                <!-- <md-icon class="example-icon">favorite</md-icon> -->
+                <md-icon class="example-icon">delete</md-icon>
+            </md-toolbar-row>
+		</md-toolbar>
+  	</md-sidenav>
+
+  	<md-toolbar color="primary">
+        <button md-icon-button (click)="sidenav.toggle()">
+            <md-icon class="md-24" mdTooltip="Menu">menu</md-icon>
+        </button>
+        <div style="position: absolute;right: 5%;" mdTooltip="User Name">{{ username }}</div>
+    </md-toolbar>
+
+    <div class="container app-content">
+    	
+    	<div *ngIf="inbox">
+        	<app-inbox [username]="username" [archived_inbox]="archived_inbox" (conversation_info)="get_messages($event)"></app-inbox>
+        </div>
+
+        <div *ngIf="archived_inbox">
+            <app-inbox [username]="username" [archived_inbox]="archived_inbox" (conversation_info)="get_messages($event)"></app-inbox>
+        </div>
+        
+        <div *ngIf="compose">
+        	<app-compose></app-compose>
+        </div>
+
+        <div *ngIf="messages">
+        	<app-messages [conversation_info]="conversation_info" [username]="username"></app-messages>
+        </div>
+    </div>
+</md-sidenav-container>

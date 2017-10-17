@@ -1,0 +1,90 @@
+<div class="alert alert-success alert-dismissable animated fadeInDown" *ngIf="success_msg" style="margin:3%">
+    <a href="#" class="close" data-dismiss="alert" (click)="close_success_msg()">×</a>
+    <strong>Success !!! </strong> Message is send to {{ conversation_with }}
+</div>
+<div class="button-row pagination-style" *ngIf="conversation_info.archived">
+	<button md-fab [disabled]="previous_page_disable" color="#e0e0e0" mdTooltip="Previous Page" (click)="go_to_previous_page()">
+		<md-icon class="example-icon">arrow_back</md-icon>
+	</button>
+	<button md-fab [disabled]="next_page_disable" color="#e0e0e0" mdTooltip="Next Page" (click)="go_to_next_page()">
+		<md-icon class="example-icon" color="#e0e0e0">arrow_forward</md-icon>
+	</button>
+</div>
+<div class="row" *ngIf="!conversation_info.archived">
+	<div class="col-md-10">
+		<form (ngSubmit)="send_message(sendMessage)" #sendMessage="ngForm" enctype="multipart/form-data">
+			<div class="row">
+				<div class="col-md-10">
+					<md-form-field class="example-full-width container">
+					    <textarea name="message" mdInput ngModel placeholder="Message @{{ conversation_with }}" [(ngModel)]="message"></textarea>
+					</md-form-field>
+				</div>
+				<!-- <div class="col-md-3" style="padding-top: 3%"> -->
+					<!-- <input type="file" ng2FileSelect [uploader]="uploader" /> -->
+					<!-- <input type="file" id="image" name="image" ngModel (change)="getFiles($event)" /> -->
+					<!-- <input type="file" id="image" name="image"  /> -->
+					<!-- <input type="file" id="image" name="image" (change)="handleFileSelect($event)"> -->
+				<!-- </div> -->
+
+				<div class="col-md-2" style="padding-top: 2%">
+					<button type="submit" md-fab [disabled]="sendMessage.value.message =='' || message==null"  mdTooltip="Send" color="primary" >
+						<md-icon class="example-icon" >send</md-icon>
+					</button>
+				</div>
+			</div>
+			<div class="row upload-file-div" mdTooltip="Send Image">
+				<div class="col-md-2">
+					<b>Upload Image:</b>
+				</div>
+				<div class="col-md-4">
+					<input type="file" id="image" name="image" (change)="handleImageFileSelect($event)" #imageFile>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="col-md-2" style="padding-top: 1%">
+		<div class="button-row pagination-style">
+			<button md-fab [disabled]="previous_page_disable" color="#e0e0e0" mdTooltip="Previous Page" (click)="go_to_previous_page()">
+				<md-icon class="example-icon">arrow_back</md-icon>
+			</button>
+			<button md-fab [disabled]="next_page_disable" color="#e0e0e0" mdTooltip="Next Page" (click)="go_to_next_page()">
+				<md-icon class="example-icon" color="#e0e0e0">arrow_forward</md-icon>
+			</button>
+		</div>
+	</div>
+</div>
+<md-card class="" *ngFor="let message of messages; let i = index " class="example-form animated fadeInUp">
+	<md-toolbar class="" color="basic">
+		Subject: <div style="color: #3f51b5;" mdTooltip="Subject"> 
+					&nbsp; {{ conversation_info.conversation_subject }}
+				</div>, &nbsp;
+		Conversation with : 
+				<div *ngIf="message.msg_receiver.username !==  username else other_content" style="color: #3f51b5;" mdTooltip="Conversation with"> 
+					&nbsp; {{ message.msg_receiver.username }}
+				</div>
+				<ng-template #other_content>
+					<div style="color: #3f51b5;" mdTooltip="Conversation with"> 
+						&nbsp; {{ message.msg_sender.username }}
+					</div>
+				</ng-template>
+	</md-toolbar>
+	
+  	<div class="msg-time-btn-class">
+		<md-card-content>
+			<div *ngIf="message.image !== null">
+				<img mat-card-image src="{{ message.image }}">
+			</div>
+			
+			<b mdTooltip="Main Message">
+				{{ message.message }}
+			</b>
+		</md-card-content>
+		
+		<md-card-actions style="padding-top: 3%">	
+			<md-chip-list>
+				<!-- <button md-raised-button color="accent" style="margin-right: 30%;" mdTooltip="Click!" (click)="get_message(message.conversation_id)">Get Messages of this Conversation</button> -->
+				<md-chip mdTooltip="Time">{{ message.timestamp }}</md-chip>
+			</md-chip-list>
+		</md-card-actions>
+	</div>
+</md-card>
